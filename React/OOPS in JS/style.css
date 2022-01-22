@@ -1,0 +1,18 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.section1{
+    height: 100vh;
+    background-color: black;
+    color:white
+}
+
+.container{
+    padding: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
