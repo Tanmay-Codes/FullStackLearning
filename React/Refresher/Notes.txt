@@ -6,9 +6,26 @@ the browser like JS. So helpts in building Highly reactive frontend websites.
 **Please note it doesnot connect database and Server.
 
 ** Components are used, which are actually a UI building blocks that we defined in React.
-
-
 The JSX allows the HTML looking code in the JS file.
+
+
+**React Starting project Commands**
+---------------------------------------
+1. To check if initial packages are installed?
+npm --version
+npx --version
+node --version
+
+2. To create a new react app
+
+npx create-react-app app-name
+
+3. Now move in the app-name directory and start development server
+
+cd app-name
+npm start
+
+-----------------------------------------
 
 React Components
 -----------------
