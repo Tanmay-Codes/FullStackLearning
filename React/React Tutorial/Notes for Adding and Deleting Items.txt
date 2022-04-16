@@ -1,0 +1,101 @@
+To make a To DO type list or a simple program that takes controled input and display it on screen
+and then that input can be erased. Doing so from react needs some points to be under consideration:
+
+1. React hooks are used UseState and SetState.
+
+2. Make seprate functions for AddItem and DeleteItem. In that add and delete functions the state is changed
+
+3. The button handler functions should call the AddItem and AddDelete functions in order to change the react state.
+
+4. To additems use the spread operator in it.
+
+5. To deleteitems use the filter functions like: item.filter((element) => element != item[index -1]).
+
+6. Now in order to use the control input, a seprate component is created with html forms
+
+syntax for form:
+
+<form className="addForm" onSubmit={handleSubmit}>
+      <label htmlFor="addItem">Add Item</label>
+      <input
+        autoFocus
+        id="addItem"
+        type="text"
+        placeholder="Add Item"
+        required
+        value={newItems}
+        onChange = {(e) => setnewItem(e.target.value)}
+      />
+      <button
+        type="submit"
+        aria-label="Add Item"
+      >
+        submit
+      </button>
+</form>
+
+7. Now one thing to note is that, the handleSubmit is actually declared here, but this function is defined in the <App.js/> .
+
+8. So the Array can be defined in the App.js or in any other components.
+
+*****************************useref**************************************************
+
+There is a problem with the above input form, 
+when the button is clicked the focus is not shifting back to the input box, but it should. So in react the problem is actually solved
+by using the useref as follows
+
+
+
+import React from 'react'
+import { useRef } from 'react'
+
+export default function AddItems({newItem, setnewItem, handleSubmit}) {
+*************************************************************
+    const inputRef = useRef();
+*****************************************************
+  return (
+
+    <form className='form' onSubmit={handleSubmit}>
+        
+
+	  <label>Add Items</label>
+
+
+        <input 
+        id='add'
+        autoFocus
+**************************************************
+        ref={inputRef}
+*****************************************************
+        required
+        type="text"
+        value={newItem}
+        onChange = {(e)=> setnewItem(e.target.value)}
+        />
+
+
+
+        <button 
+        id='addbutton' 
+        type='submit'
+        aria-label='Add Item'
+**********************************************************
+        onClick={()=> inputRef.current.focus()}
+*********************************************************
+        >Add</button>
+
+
+    </form>
+  )
+}
+
+
+
+
+So here what happened is we import the useRef from react
+1. Create a variable inputRef using the useRef().
+
+2. in the button here we define what happens onClick()
+here the anonymouse function is defined in the onClick, this anonymous function is used to set inputRef.current.focus()
+
+Doing this will shift the focus back to the input box

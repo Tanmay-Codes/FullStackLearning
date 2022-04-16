@@ -1,0 +1,45 @@
+***********************************************************************************************************
+Consider the situation where you have to add a search box that display only the list item for the search
+***********************************************************************************************************
+
+**********IN THE SearchItem.js*********************
+
+import React from 'react'
+
+export default function SearchItem({search, setsearch}) {
+  return (
+    <form className='form' onSubmit={(e)=> e.preventDefault()}>
+        <label>Search Item</label>
+        <input 
+        id='search'
+        type='text'
+        role='searchbox'
+        placeholder='search'
+        value={search}
+        onChange= {(e)=> setsearch(e.target.value)}
+        />
+    </form>
+  )
+}
+
+***********************************************************************************************************
+
+****************IN THE App.js***********************
+	const [search, setsearch] = useState('')
+      <SearchItem 
+      search = {search}
+      setsearch = {setsearch}
+      />
+
+      <Content
+      // here item.filter is used to filter out the state of search item shows in the search
+      items = {items.filter(item=> ((item.item).toLowerCase()).includes(search.toLocaleLowerCase()))}
+      />
+
+*****************************************************************************************************************
+
+Here there are items searched in the searchItem, so the input box of the search Item has the code to catch the setstate of the search
+
+in App.js the props of the content component, its the component which actually displays the list of items on the screen.
+so what happen here is the props passed through the item.filter, this filter is comparing the searchstate value and reders only those items
+which include the values of the setsearch.
