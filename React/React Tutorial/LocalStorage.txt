@@ -1,0 +1,25 @@
+There are many reasons to save and fetch the data from the local storage, It is done so that
+for example if a goal list or shopping list added can be saved after the page reload
+
+Steps to do that
+
+Basically we do the two step process, at first we are going to stringify and save JSON data into some file
+
+Seconedly we use the JSON.parse.getItem to fetch the stored data and display it in the default state of the page load
+
+so here is an Example
+
+const [items, setItems] = useState(JSON.parse(localStorage.getItem('goallist')));
+
+****here goallist is the local name given to the data that is save under
+
+const setAndSaveItems = (newItems) => {
+  setItems(newItems);
+  // here we can save the changes in the local storage so that we can open and load the changes makes before
+  localStorage.setItem("goallist", JSON.stringify(newItems));
+}
+
+
+****Here there is separate function created that can set state and save the data in the local storage
+
+***So what happens here this piece of function can be always called whenever the need of set state function is needed.

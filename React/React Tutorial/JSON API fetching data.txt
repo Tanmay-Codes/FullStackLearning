@@ -1,0 +1,197 @@
+********** Using the JSON server to fetch data from development API**************
+
+https://www.npmjs.com/package/json-server
+
+
+This website find more about the JSON-server also its important to install it using npm package manager as follows
+
+1. install the JSON serever 
+
+npm install -g json-server
+
+2. Create a db.json File with some data, the data format is like as follows:
+
+{
+  "posts": [
+    { "id": 1, "title": "json-server", "author": "typicode" }
+  ],
+  "comments": [
+    { "id": 1, "body": "some comment", "postId": 1 }
+  ],
+  "profile": { "name": "typicode" }
+}
+
+
+3. To start the JSON server use the following command
+
+json-server --watch db.json
+
+
+Now if you go to http://localhost:3000/posts/1, you'll get
+
+{ "id": 1, "title": "json-server", "author": "typicode" }
+
+
+*******************************************************************************************
+
+Important points:
+
+using the npm install the JSON server will be added as a dependency to the project.
+
+so when we have to simply launch and work with it, we can do npx, this will allow us to use
+it without creating any dependency on JSON.
+
+
+so Create folder Data and in it a file db.json
+then in the secondary terminal window,
+
+****Important to create this data outside the src folder*****
+
+npx json-server -p 3500 -w Data/db.json 
+
+this will install the json serever,
+http://localhost:3500/Items
+this link in the browser will show the json data in browser.
+
+
+***********************************************************************************
+Now consider this usecase here, there is some data and we have to fetch the data
+so here example code of using the fetch data
+
+const API_URL = "http://localhost:3500/Items";
+
+  useEffect(() => { 
+    const fetchItems = async () => {
+      try{
+        const response = await fetch(API_URL);
+        const listItems = await response.json();
+        setItems(listItems);
+        console.log(listItems);
+      }catch(err){
+        console.log(err.stack);
+      }
+    }
+    fetchItems();
+  }, []);
+// Empty array dpendency means it only effect once at load time
+
+*******************************************************************************
+
+now as shown above example will not show any message that can display the problem to user that there is something wrong with he API
+
+
+In order to get that kind of message the above code needs to be alter a little bit, so here is how it is done
+****************************************************************************
+
+const API_URL = "http://localhost:3500/Items";
+const [fetcherr, setfetcherr] = useState(null);
+
+  useEffect(() => { 
+    const fetchItems = async () => {
+      try{
+        const response = await fetch(API_URL);
+	  if(!response.ok) throw Error("Unexpected resopnse from page");
+        const listItems = await response.json();
+        setItems(listItems);
+//so here setting the fetcherr to null in case everything is working
+        setfetcherr(null)
+      }catch(err){
+        serfetcherr(err.message);
+      }
+    }
+    fetchItems();
+  }, []);
+
+
+//There are then some changes to be made in the return block so that the user could see the error message
+
+  return (
+    <div className="App">
+      <h1>Lets learn about the local storage and use Effect</h1>
+      <Form
+        newItem={newItem}
+        handleSubmit={handleSubmit}
+        setNewItem={setNewItem}
+        handleDelete={handleDelete}
+      />
+
+************here it is****************************
+      <Content items={Items} />
+      <div>
+        {fetcherr && <p>{`Error : ${fetcherr}`}</p>}
+      {!fetcherr && <Footer length = {Items.length}/>}
+      </div>
+********************************************************
+    </div>
+  );
+}
+
+
+**************************************************************************************************************
+Here is a fun code to simulate the loading time in the website. this is done with the setTimeout((function), duration in ms).
+*****************************************************************************************************
+
+
+  const [fetchErr, setFetchErr] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  //**************USE Effect is here******************** 
+
+  useEffect(() => { 
+    const fetchItems = async () => {
+      try{
+        const response = await fetch(API_URL);
+        if (!response.ok) throw Error("Unexpected response recieved");
+        const listItems = await response.json();
+        setItems(listItems);
+        setFetchErr(null);
+      }catch(err){
+        setFetchErr(err.message);
+      }
+      finally{
+        setIsLoading(false);
+      }
+    }
+
+    setTimeout(()=> {
+      fetchItems();
+    }, 2000)
+  }, []);
+
+
+///*******then there are more codes in the return block****************
+
+
+  return (
+    <div className="App">
+      <h1>Lets learn about the local storage and use Effect</h1>
+      <Form
+        newItem={newItem}
+        handleSubmit={handleSubmit}
+        setNewItem={setNewItem}
+        handleDelete={handleDelete}
+      />
+      <Content items={Items} />
+//************Here it is*************************************
+      <div>
+        {isLoading && <p>Loading Items...</p>}
+        {fetchErr && <p>{`Error : ${fetchErr}`}</p>}
+      {!fetchErr && !isLoading && <Footer length = {Items.length}/>}
+      </div>
+//**********************************************************
+    </div>
+  );
+}
+
+
+**********************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
