@@ -1,0 +1,20 @@
+1. Important to know that the react router dom is updated to v6, but here I am using
+npm install react-router-dom@5.2.0
+
+older version of react router dom that uses the switch instead of routes.
+
+
+2. .env file is made with the link that looks into the asset folder, but 
+there is a thing to remember is that the react aplication works only if the
+url name starts with REACT_APP
+here like in this case if the name suppose to be "PUBLIC_FOLDER"
+then it is actually suppose to be working only if we give it name:
+REACT_APP_PUBLIC_FOLDER
+
+3. Note in order to fetch data from api, we use to edit the package json in client
+so after everything we ill add proxy, see example in this project
+
+
+4. Timeago was returning warning si the alternative is used here, called moment, so npm install moment
+and then import moment from moment and then use moment("given date here").fromNow() this will return a string
+like 1 hour ago.
