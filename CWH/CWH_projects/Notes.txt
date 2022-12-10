@@ -1,0 +1,160 @@
+This is step by step guide on a high level how to create a Backend service for an App using MERN
+
+1. To create a seprate Backend Folder and in that folder at cmd run <npm init>
+(this will create the package json files).
+
+2. Now install the express and mongoose, npm i express, mongoose
+(This is because we are using MongoDB and Express framework)
+
+3. In order for the application to run everytime on saving we have to install nodemon.
+(note: in order to install the nodemon as dev dependency do: <npm i -D nodemon>
+but if nodemon not work try installing it globally, using <npm i -g nodemon> ).
+
+4. Now create the db.js here the mongoose function is created with a callback function that runs when the db is connected.
+
+example:
+<Code db.js>
+
+//importing the mongoose 
+
+const mongoose = require('mongoose');
+
+//from mongoDB - Altas or compass we get this db url
+
+const mongoURI = 'mongodb://localhost:27017'
+
+// creating a function that connects the mongoDB and return a callback that says the db is connected
+
+const connectToMongo = ()=>{
+    mongoose.connect(mongoURI, ()=>{
+        console.log("Connected to DB");
+    } )
+}
+
+//exporting the module so that it can be imported in other files
+module.exports = connectToMongo;
+
+<Code db.js>
+
+
+
+5. Create the index.js where we import the express, and can use the boiler plate code from teh website, if not then here is the example
+
+<Code index.js>
+
+//importing the mongoDB function as created in db.js
+
+const connectToMongo = require('./db');
+
+//importing the express
+
+const express = require('express')
+
+connectToMongo();
+
+const app = express()
+const port = 3000
+
+app.use("/api/auth", require('./routes/auth.js'));
+
+app.listen(port, () => {
+  console.log(`Example app listening on  http://localhost:${port}`)
+})
+
+<Code index.js>
+
+
+6. Create now the Mongo DB schema, can check out the mongoDB documentation, Important is to export it like this:
+
+<code how to export> 
+
+module.export = mongoose.model('name', NameSchema)
+
+<code how to export>
+
+
+7. Now can create the middleware inside the index.js, this will be hitting the routes, here is how the middleware is written:
+<defining available routes>
+
+const connectToMongo = require('./db');
+const express = require('express')
+
+connectToMongo();
+
+const app = express()
+const port = 3000
+
+//here the middleware are called as 
+app.use(express.json())
+//This middleware express.json is used so that we can fetch from body of the request json data. without it we will get undefined in console.
+
+app.use("/api/auth", require('./routes/auth.js'));
+
+app.listen(port, () => {
+  console.log(`Example app listening on  http://localhost:${port}`)
+})
+
+<defining the available routes>
+
+
+note here in the browser when localhost:3000/api/auth is called it will hit the routes defined here in the folder routes file auth.js
+
+8. In the routes folder create the routes, like in this case example we create the auth routes that is alreadt we have called in the middleware.
+
+
+
+9. The boilerplate of creating routes:
+<Creating routes example>
+
+//import express
+
+const express = require('express');
+
+//define router as express function
+
+const router = express();
+
+//create a get request as shown here to fetch the data
+
+router.get('/', (req, res) => {
+   const  obj = {
+    item:   "name",
+    item_id: 1
+    }
+    res.json(obj);
+})
+
+module.exports = router;
+
+<Creating routes example>
+
+
+10. There is a good chance that the users can mess up with the model scheme and there could be the duplicacy that we want to avoid.
+
+in order to do that, we have to use the express validation to check if the correct values are given and if not then should throw the error.
+
+In order to avoid the duplicating of data create the indexes of given model
+Examplecode:
+
+<At the end of the schema just before exporting>
+
+//Suppose this is UserSchema
+
+const User = mongoose.model('user', UserSchema);
+User.createIndexes();
+
+module.export = User;
+
+
+<At the end of the schema just before exporting>
+
+
+Some Common Errors:
+
+1. In mongoose schema alsways use the syntax const mongoose = require('mongoose'); in order to import the mongoose library.
+
+2. Be verycareful while defining the type in the schema.
+
+3. res.status is depricated so use res.sendstatus(200). this will work just fine.
+
+4. In Database , the put request goes to the test in the compass app, after connecting to the database.

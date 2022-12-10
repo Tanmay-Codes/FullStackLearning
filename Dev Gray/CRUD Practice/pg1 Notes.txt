@@ -1,0 +1,46 @@
+So some important point to notice here
+
+const API_URL = "https://jsonplaceholder.typicode.com/";
+
+// Note here the state setreq is mentioned but not used, its because if the case arrises that we have to make req based on state changes....
+// const [req, setreq] = useState('users');
+
+  const req = "users";
+  const [fetchErr, setfetchErr] = useState(null);
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    const fetchItems = async() => {
+      try{
+        const response = await fetch(`${API_URL}${req}`);
+        if (!response.ok) throw Error("Something went wrong Please Reload!!")
+        const listItem = await response.json();
+        setfetchErr(null);
+        setItems(listItem);
+      } catch(err){
+        console.log(err.message);
+        setfetchErr(err.message);
+      } 
+    }
+    fetchItems();
+  }, [req]);
+
+
+1. inside use Effect there is anonymous function
+
+2. Inside that anonymous function there is a self invoked function defined known as fetcItems
+
+3. Inside fetch Items the definition is divided into try and cath(err) blocks
+
+4. Notice the fetchItems are actually async.
+
+5. Notice that the await is done twice, first when fetching the response and seconed when defining its data response.json();
+
+6. So here we then use the react hooks, items and setItems, which changes the initial state of the null array to the state change as per the 
+data is fetched from the API.
+
+7. Notice the dependecy of the UseEffect is actually not the null array, this means that the useEffect will not be dependent only at load time
+but this will be dependent on the state change of the req.
+
+8. This is helpful in case the API has different request types then it means we can add button to it and then change the state of the req
+and then base on this req change the data rendered can be easily changed.
+

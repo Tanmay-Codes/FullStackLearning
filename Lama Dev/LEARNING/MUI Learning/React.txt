@@ -1,0 +1,8 @@
+UseEffect
+-----------
+This works when we need to render the page based on any action, so that action then can controls the rendering of the page.
+
+So basically there is some dependency on which useEffect work to render the page, so if the dependency changes he useEffect
+will triggered
+
+Also this works as a async function.

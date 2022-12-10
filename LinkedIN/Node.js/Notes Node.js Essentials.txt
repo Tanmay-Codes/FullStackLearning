@@ -1,0 +1,140 @@
+1. For the browser the global object is the window, but for the node JS the global object is called the global
+
+2. Its important to know that in node.JS every variable has its own scope to that file. for example
+
+<Code>
+let h = "Hello there!!"
+console.log(global.h)
+
+</Code>
+
+<output> undefined
+
+it is undefined because the global object is not exactly like the window object so the variable defined here is limited to this file
+
+****how to fix this issue then??*****
+console.log(h);
+
+this will work and output will be "Hello there!!"
+
+3. GLOBAL OBJECTS
+is containing all the objects, values and methods that can be used without importing anything into the node js file
+
+4. Extracting the filename and dirname
+-----------------------------------------
+The file name and the dirname are printed in this way:
+console.log(__filename);
+console.log(__dirname);
+
+5. How to import files in the Node.JS
+------------------------------------------
+we need a module path to be included in our working file
+
+const path = require("path");
+console.log(`this is the path of global file ${path.basename(__filename)}`);
+
+//notice here the module that is imported here is imported in a kind of variable name, and the followed with a keyword require
+
+6. How to check what else available to us in the global object?
+--------------------------------------------------------------------
+for (key in global){ console.log(key)}
+
+7. PROCESS OBJECT
+--------------------
+we collect information from terminal and this information is stored in the process.argv array
+we can get communicate with the terminal, read environment variable and informations.
+
+so this is beneficial because this will let us to get the user inputs and manipulate it, and create crazy comand line applications with it
+
+(check the code in practice)
+
+8. process.std.write
+----------------
+when we use the process.std.write we  are sending some strings to the terminals
+
+9. Asynchronously using Node.js
+-----------------------------------
+This basically means that we are calling some functions at the specific time, i.e, say calling a function when data is available or when the exit is available
+example code  StandardINandOUT.js file.
+
+another form of using the asynchronous function is by timeing, see example time.js
+
+10. locally installed module
+--------------------------------
+example path module
+expression how to import:
+
+const path = require("path")
+console.log(path.basename(__filename));
+
+for example check the preinstalledmodule.js in the practicebook
+
+similar modules are, Util (which time logs the command)
+V8 module tells us how much memory the app is using.
+
+---readline module
+-------------------------This module is used to collect informations from the users, it has a wrapper around the std input and std out
+in order to create an interface there is some syntax to remember
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+}
+);
+here rl is now created, now this is used to call some functionality like:
+rl.question("a question or a string here!!", callBackFunctionHere);
+this takes a string and a callback function to collect all the information from the users.
+check----practice file readlinetest.js
+
+11. Exporting custom modules
+-------------------------------
+it is easy to export modules , just create any functionality and do module.exports
+example:
+<suppose this in file mymodule.js>
+let count = 0;
+const inc = ()=>++count;
+const getcount = ()=>count;
+
+module.exports={
+	anything: true,
+	who: Bill,
+	count,
+	inc,
+	getcount
+}
+<------------->
+<Lets open other file say app.js>
+
+//this is how we include custom module
+
+const mymodule = require("./mymodule");
+console.log(mymodule.anything);
+
+//output is true
+
+<--------------->
+
+
+12. Event Emitter Tool
+-------------------------
+It allows us to listenfore and create custom events
+
+const events = require("events")
+
+let emitter = new events.EventEmitter();
+
+emitter.on("EventName", function)
+//this emitter on is basically firing the function on the type of EventName, so 
+//let us say that we are saying that the function should print a user and Message when the customEven is fired (this is done in practice file)
+
+emitter.emit("EventName", the_arguments_of_functions)
+
+see example in practice customemitter.js
+
+
+13. The fs module
+---------------------
+it allows us to interact with the file system, list the files, change file system, change directory, create files etc
+note its done synchronsly and Asynchronsly as well, but which one should we use depend upon the code. check the file fsModulePractice.js
+
+Note: it is better to use Async type of function so that the one function that is running in the background do not block the other functions, 
+

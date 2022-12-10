@@ -1,0 +1,48 @@
+MUI Buttons
+------------
+
+-Use stack with spacing and direction as props to build the layout like you do for the case of Divs
+
+-Use buttons with the variant as a props and variants as (Outlined, Contained, text) , THe href can be added with a link to
+change the button to anchor tag
+
+- Can also add Icons to the buttons, Use the  StartIcon props and in it invoce the icon for example sendIcon is a mui Icon then
+<Button variant='contained' sendIcon={<startIcon/>} />
+
+- simar to startIcon we can do endIcon to keep the Icon in the button next to the text
+
+- We can a button with the Icon, using the IconButton so for example the send button
+<IconButton area-label-'sebd'> <sendIcon/> IconButton/>
+
+Using Styled components and breakpoints
+----------------------------------------
+import { styled } from "@mui/material/styles";
+
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  [theme.breakpoints.up("lg")]: {
+    width: "1200px",
+    margin: "0 auto",
+  },
+  display: "flex",
+  justifyContent: "space-between",
+}));
+
+Note this is important to understand that importing styled in this way only to make it work
+Also note that to make the breakpoint actually responsive, here i have use up lg which is above 1200px so 1200px below 
+there is different behaviour and above 1200px this size of width given is fix. But if I have done up sm which is above 600ox
+then the width size of 1200px will be fixed till the screen size reaches 600px, so for any screen in between that will break
+the responsiveness of the code.
+
+Form Control and Form Control Label
+-----------------------------------
+Note that the form control is different it holds the form label and on screen the form label contains the prop
+label that will be dislpayed
+and for example when you have to make a checkbox like thing that says I accepts the terms and conditions then
+in thant case make sure to include the formControlLabel and make then the label of that string and inside it there is
+another prop called the control which holds the Checkbox for example
+
+<FormControlLabel> Label='some string here' control={<Checkbox/>} />
+
+Menu Item
+------------
+Note we can be confused about the positioing of the pop over and we can check it positioning any time in MUI docs components POPPVER

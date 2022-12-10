@@ -1,0 +1,258 @@
+To initialize package.json file
+---------------------------------
+> npm init
+
+What goes inside package.json?
+--------------------------------
+package name: (This name is going to be published name) so dont name it with the same name that exist in npm
+version: (version of package)
+description: (can write what this package is about)
+enterypoint:(name of the file which will launch first, so mostly index.js)
+test command: (any command to test if package is working)
+git repository: (write the link of the repository in which it needs to be published)
+keywords: (The keywords will allow the search capabilities for this npm package)
+author: (can write your name)
+license: ISC (more about it in npm documentation as per your needs, ISC is standard licensing
+
+How to install packages ?
+----------------------------
+>npm install package-name
+
+How to install packages that just require as the development dependencies?
+--------------------------------------------------------------------------
+>npm install package-name --save-dev
+
+so dev tools are not build in the production, and they will be just as development dependencies
+
+Global Directories
+---------------------
+Sometimes we need to install packages/tools globally, for example if there is any new cli tools to create new react app
+so where does the global
+
+So these packages are sit in the following directories:
+for the Mac/Linux
+--------------------------
+--> /usr/local/lib/node_modules
+-->/usr/local/lib/node
+
+for the windows
+--------------------------
+--> %appdata%\npm\node_modules
+
+So how to install packages globally?
+-----------------------------------------
+npm install -g name
+
+sometimes in linux and mac this does not work, this is because the fact that the permissions are not granted
+so other ways is to do this is by sudo install
+
+sudo npm -g name
+password: your systems password
+
+
+other example is to change the directory path where the global packages are installed.
+
+How to understand which package is out of date? and how to install specific version of the package
+-----------------------------------------------------------------------------------------------------
+for local packages
+--> npm outdated
+
+for global packages
+--> npm outdated -g
+
+To install specific version
+--> npm name_version1.0
+
+or
+
+-->npm name_version1.0 -g
+
+
+In order to update the package
+
+--> npm update packagename
+
+sometimes it causes error so its better to do
+
+--> npm install packagename_withSpecificVersion
+
+this will like as if reinstalling the package and updateing the package to the desired verision
+
+How to uninstall the package?
+--------------------------------
+--> npm uninstall package-name
+
+Understanding the symentics of the package numbers
+--------------------------------------------------------
+1.4.2
+1------this no indicates the Major release
+4---------this no indicates the minor release
+2------------this no indicates the patch release
+
+Sementic Versioning
+---------------------------
+
+caret ^ and tilde ~ with charachter x
+
+--> ~4.16.x 
+means the any version of 4.16 but it wont go beyond the 16th version i.e, it will not go for 4.17 or 4.20
+
+--> ^4.x.x 
+means that it will install any version like 4.16.17 or 4.19.20 but it will never go for the verions beyond 4 i.e, like 5.1.1 
+
+
+(note here if you want to be very specific just remove charachter x by no. like ~4.16.2 or ^4.5.6)
+
+package-lock.json
+-----------------------
+it install the same where we pass out package, it makes sure to include exact dependencies so that the dependencies does not get
+out of controll
+
+
+Working with npm cache
+--------------------------------
+npm keeps the cache of modules so it doesnot hit them everytime, but this sometimes doesnot works properly
+sometimes npm cache gets confused, so make a not to yourself that clearing the npm cache is a part of first steps
+to troubleshooting your code
+
+To run a report to verify cache
+--> npm cache verify
+
+To clear cache
+--> npm cache clean --force
+
+
+npm audit
+---------------
+it runs and tells any issues related to the package, to make it work properly make sure version above 6
+if dont just install
+npm install npm
+or npm install latest
+
+to check version npm -v
+
+so running npm audit gives the full report of what vulnerabilites are, and if they are high or low
+the low are fixable sometimes just looking by installing the correct patch of the package or by changing the expression code
+but the one with the high vulnerability it needs to be fixed asap
+
+SO on doing npm audit we have to first fix the high vulnerability issues and critical ones,
+
+also check if the audit gives some information like warning that says Semver 
+this means that the patch might be breaking the package or breaking the code
+
+So to fix it there are two ways
+1. npm audit fix
+2. is going through the warning one by one and fixing it, This is recomended because we have no idea which package can break the code
+
+
+Scripting the package.json file
+--------------------------------------
+This gives us a simple way to do a simple command to repeat and execute complex commands, 
+
+check the link of reference
+https://docs.npmjs.com/cli/v8/using-npm/scripts
+
+so where to add these scripts?
+
+check inside package.json module
+
+then check in the file there should be a propery scripts
+for example here:
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+now suppose we have a nodemon installed as package and everytime we want to make nodemon to run the index.js file on start so how the script is written?
+
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+	"start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+So here the start script is available by default but suppose i want to do the same command with my own script name
+lets say mycustomscript so do this simply
+
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+	"start": "nodemon index.js"
+	"mycustomscript" : "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+the correct way then to run it is then
+--> npm run mycustomscript
+
+
+npx
+-----------
+this is a cli tool that install the package once, so it doesnot crowd unncessarly in our global
+
+Alternatives to npm are
+-----------------------
+yarn (yarnpkg.com) it is faster than npm tho
+npx install yarn
+to install yarn
+
+other is 
+ni
+it is same as npm and yarn but less verbal approach
+
+how to install?
+npx install better-npm
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

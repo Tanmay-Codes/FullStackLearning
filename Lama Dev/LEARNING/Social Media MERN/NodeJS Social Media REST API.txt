@@ -1,0 +1,201 @@
+Now In Order to create the REST API There are some stepts to follow:
+
+1. New Folder(with any name) and then in VS Code terminal we first initialize the node application
+
+<npm init>
+
+just then simply keep pressing enter till you see the package.json
+
+2. Then we add more libraries:
+<yarn add express mongoose dotenv helmet morgan nodemon>
+
+**If not working check if yarn is intalled <yarn --version>
+**if not recognized do <npm install --global yarn>
+
+lets know a lil bit about these library:
+-Express: In this our node.js server will run.
+-mongoose: it is for our Mongo DB.(we create users/post/etc)
+-dotenv: Afer mongoDB the secret urls. password, username need to be hidden safe, so we keep in env file
+-Helmet: It prevents vulnerability of website, It makes secure request, so the vulnerable properties of request header is not exploited
+-Morgan: It basicalls tells the resolve of each request, i.e, the request time took, and if resolved or not
+-nodemon: It allows to restart the server runs, so It listen to the changes and it refresh and restart the application
+
+3. After installing you have to open the file package.json then under the "scripts"{ "start" : "nodemon index.js"}
+then create a new file index.js and test it in next step.
+
+4. Go to index.js and write the following code: 
+<code>
+const express = require("express");
+const app = express();
+
+
+app.listen(8800, ()=> {
+    console.log("Backend is running, and now refresh")
+});
+
+<code>
+
+Now on save this shall give the output in the comand line.
+
+5. Now time to add the other libraries and also establish the connection with the mongoDB. Note you have to create the cluster firs
+then add the username and password to that cluster and then choose the connection type, in this case we choose connecting the app
+
+6. Copy the connection url and keep it in the env file for safekeeping, go to mongoose connection documentation and then establis
+the connection, here is sample code.
+
+<code>
+
+const express = require("express");
+const app = express();
+
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const helmet = require("helmet");
+const morgan = require("morgan");
+
+
+dotenv.config();
+mongoose.connect(process.env.MONGO_URL, ()=>{
+    console.log("MongoDB Connected Sucessfully")
+});
+
+app.listen(8800, ()=> {
+    console.log("Backend is running, and now refresh")
+});
+
+
+<code>
+
+note: dotenv.config() is ncessary to process the env file
+
+
+
+7. Notice we are going to use the middleware. These are the functions that are called when we hit the certain routes. like /users or /posts etc.
+
+8. Now keep in mind while establishing the connection with the mongoDB and making the REST API, keep the mongoDB newtwork setting to connect from anywhere.
+
+9. After this make seprate folders for routes and models, routs contains the requests and the model contains the DB schema.
+
+
+10. Notice that we have to Use the Postman with desktop agent in order to test our API by making certain requests.
+
+
+
+Example codes of Schema 
+
+
+inside Users.js
+
+<Code>
+const mongoose = require("mongoose");
+
+const UsersSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        require: true,
+        min:3,
+        max:40,
+        unique: true
+    },
+    email:{
+        type: String,
+        required: true,
+        min:6
+    },
+    password:{
+        type: String,
+        required: true,
+        min:5
+    },
+    profilePicture:{
+        type: String,
+        default: ""
+    },
+    coverPicture:{
+        type: String,
+        default: ""
+    },
+    followers:{
+        type: Array,
+        default: []
+    },
+    following:{
+        type: Array,
+        default: []
+    },
+    isAdmin:{
+        type: Boolean,
+        default: false,
+    }
+},
+{timestamps:true}
+);
+
+module.exports = mongoose.model("Users", UsersSchema);
+
+<code>
+
+**************************************************************************
+In auth.js
+*******************************
+const router = require("express").Router();
+const User = require("../models/Users");
+
+router.post("/register", async(req, res)=>{
+    const newUser = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+    }); 
+    try{
+        const user = await newUser.save();
+        res.status(200).json(user);
+    }catch(err){
+        console.log(err)
+    };
+
+});
+
+module.exports = router;
+
+
+***********************************************************
+In Index.js
+****************************************
+const express = require("express");
+const app = express();
+
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const userRoute = require("./routes/users");
+const authRoute = require("./routes/auth");
+
+
+dotenv.config();
+mongoose.connect(process.env.MONGO_URL, ()=>{
+    console.log("MongoDB Connected Sucessfully");
+});
+
+// middleware
+app.use(express.json());
+app.use(helmet());
+app.use(morgan("common"));
+
+app.use("/api/users", userRoute);
+app.use("/api/auth", authRoute);
+
+
+app.listen(8800, ()=> {
+    console.log("Backend is running, and now refresh");
+});
+
+******************************************************************
+
+
+
+
+**************For Password Protection**********************
+Note: In order to protect the password we need a library bcrypt
+

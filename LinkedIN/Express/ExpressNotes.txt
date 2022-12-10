@@ -1,0 +1,429 @@
+-------/// LEARNING EXPRESS FOR BACKEND ///-----------------
+
+----node.js is a cross platform JavaScript runtime library. It is used to write server side code
+----npm or node package manager utilizes packages to access any file that we need access.
+
+not to get started with express both node and npm needs to be installed
+
+how to check?
+
+in cli
+
+-->node -v
+
+-->npm -v
+
+This should return the version of node and npm installed. 
+--------------------------------------
+What is Express? (https://expressjs.com/en/starter/installing.html)
+----------------------------------------
+Express is a minimal, flexible, no JS application framework. It is definitely one of the most, if not the most popular framework for node.JS. 
+Express is used to make building websites, web applications, and APIs, as easy as possible using JavaScript. 
+It is used to handle and simplify responses from API requests and supports various templating engines to simplify HTML generation.
+
+
+What is Express Application Generator? (https://expressjs.com/en/starter/generator.html)
+--------------------------------------------------------
+Express Application Generator is a package that allows you to quickly and easily get a skeleton project with Express up and running.
+sometimes the most difficult part about getting started is setting up a project. This takes any of the guesswork out of the equation. 
+
+in order to start with express. create a project and navigate to the project directory
+
+in console:
+--> npm install express-generator 
+
+////if this does not work then check if node and npm is installed or not, and then retry installing express-generator globaly//////
+
+---> npm install express-generator -generation
+
+(to check if its working)
+-->express -h
+
+the console will return following output:
+
+  Usage: express [options] [dir]
+
+  Options:
+
+        --version        output the version number
+    -e, --ejs            add ejs engine support
+        --pug            add pug engine support
+        --hbs            add handlebars engine support
+    -H, --hogan          add hogan.js engine support
+    -v, --view <engine>  add view <engine> support (dust|ejs|hbs|hjs|jade|pug|twig|vash) (defaults to jade)
+        --no-view        use static html instead of view engine
+    -c, --css <engine>   add stylesheet <engine> support (less|stylus|compass|sass) (defaults to plain css)
+        --git            add .gitignore
+    -f, --force          force on non-empty directory
+    -h, --help           output usage information
+
+
+------------------------------------------------------------------------------------------------------
+starting with the project we first import the gitignore file and then use the Handlebars engine supports. so how to do that?
+
+-------------------------------------------------------------------------------------------
+
+--> express --git --hbs nameofapp
+
+
+This will create number of folders, to check do "ls" command to see what files are there. Not then navigate to your nameofapp folder
+and then install the dependencies by doin "npm install".
+-----------------------------
+--------------
+To run the app use the command
+--------------------------
+1. for windows command prompt:
+-------------
+set DEBUG=myapp:* & npm starting
+
+2. for MacOS:
+--------------
+$ DEBUG=myapp:* npm starting
+
+3. ON windows Powershell
+------------------------
+$env:DEBUG='myapp:*'; npm start
+
+(use this in windows in vs code console)
+-------------------------------------------
+
+in browser then open http://localhost:3000/
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                EXPRESS BASICS
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+1. STARTING A project
+-----------------------
+
+>create folder named with your app and then in terminal do npm information
+>follow the steps and can add yourself as author.
+
+>npm install express
+>npm install nodemon
+
+Adding Dev dependecies to ensure project is compatible with ES6 syntax (Specific version of JS that is considered as Industry standard)
+
+>npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/node
+
+
+Now create a configuration file for babel
+-----------------------------------------
+
+>>can create this file manually but also from the command line by doing [>type nul > .babelrc]
+
+inside .babelc
+{
+    "presets": ["@base/presets-env"]
+}
+
+
+
+Now configure the package.json
+-----------------------------
+1. open package.json and add a type as shown below
+{
+  "name": "express-essentials",
+  "type": "module",                             <--------<<<
+  "version": "1.0.0",
+  "description": "",
+
+***Reason of including module is because we want to be able to use ES6 in project. For example "module" is defined inside index.js with use of import and export..instead of 
+"require" function that was used in previous version of JavaScript
+
+2.nodemon is used to automatically run the server on save. so in package.json go to scripts and add on start nodemon
+so adding start scipt as follows:
+
+  "scripts": {
+    "start" : "nodemon --experimental-json-modules --exec babel-node index.js"
+  },
+
+----Nodemon is refrences the nodemon package to use so that we dont need to constantly restart our server
+----json modules is ability to load json files
+---- babel-node is telling the server to run the project using babel and start application from index.json files.
+
+Note that here our entry point is index.js. so in package.json in the key "main" : "index.js" is written, but sometimes we decide to
+add app.js as the entry file, so then in this case we have to change key "main":"app.js" and also point the script to run app.js instead of index.js
+i.e in key "start": "nodemon --experimental-json--modules --exec babel-node app.js.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+NOTE:  A dummy data available to test the servers and more...
+---------
+****Mock Data regeneration using Mockaroo****
+https://www.mockaroo.com/
+
+
+
+
+*******************************************************
+Index.js File (writting first server setup using express)
+********************************************************
+import express from "express";
+// importing the express
+const app = express();
+// creating the instance of the express
+const PORT = 3000;
+// creating a varible of port but its not necessary except that its easier fir refactoring the code
+
+app.listen(PORT, ()=>{
+    console.log(`listening on port ${PORT}`);
+})
+
+
+************************************************************************************************************************
+                              CRUD (CREATE READ UPDATE DELETE)
+*******************************************************************************************************************************
+
+The four HTTP methods that we are going to focus on are GET, POST, PUT and DELETE. 
+Think about each of these methods using an example of an app where you can create a grocery list. :-
+
+1. We use the GET method to retrieve or get data from the server.
+
+2. POST sends data to the server and generates a new resource.
+ (You would use the POST method if you wanted to add a new item to your grocery list. )
+
+3. The PUT method is used to update an existing resource. 
+ (Let's say you had three bananas on your grocery list but now you need five. Since you need to update an existing grocery list entry,
+you would use PUT to update the resource)
+
+4. And then we have DELETE which does what its name implies. It deletes an existing resource.
+ (If we decided we no longer needed to get cereal, we would use the DELETE method to remove that item from our grocery list.)
+
+
+There are two HTTP messages. Requests and responses. 
+-----------------------------------------------------
+
+When you start constructing your routes, you will use these to communicate back and forth with the client and the server. 
+Requests are sent by the client to trigger an action on the server. In contrast, responses are the answers sent from the server. 
+
+
+
+------------------------------Defining the requests and responses-----------------------------------------------
+
+we'll go ahead and apply the GET method to app. Each HTTP method takes two arguments, the path and the handler. 
+The handler is basically the function that is going to execute once the path is found. 
+For our path, we're going to use forward slash.
+And then for the handler, we're going to pass the request and response along with some additional code to be executed. 
+So first, lets put in slash, so this is the route. So that is our first argument, and then our next two arguments, request and response.
+
+example:
+
+// Creating A GET request
+app.get('/', (req, res) => {
+    res.send("this is a GET request");
+   })
+
+********Check more in Index.js in folder Express-essentials.
+
+
+--------------------------------------
+In order to run these requests we can use the postman or the thunderclient in VS code
+so lets say we use the thunderclient
+-----------------------------------
+-Create a new collection and then add the GET, POST, PUT and DELETE requests. 
+while creating it, remember to use the url as you have defined in the port, i.e, same url as shown in the browser. Then 
+check if the correct request you are making, Then just start checking it with endpoints
+for example:
+http://localhost:5000/create     ///for the post request
+http://localhost:5000/           ////for the get request as in above example.
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
+Now lets see an example of requesting the static files with express
+
+// Requesting a static page
+app.use(express.static("public"))
+
+// suppose now we want to use a particular link say /images/img1.jpeg then??
+app.use("/images", express.static("images"))
+
+------------------------------------------------------------------------------------------------
+
+*************************************
+WHAT ARE ROUTING PARAMETERS??
+***************************************
+
+A route is how an application responds to a client request to a particular end point.
+In order to construct our routes in express, we need two key components, the path and the method. 
+We learned that the path is what defines our end points. In this example, "/animals" is our path. 
+This could be slash images or slash data, whatever makes sense for your application and the information that it is providing or utilizing. 
+Then our method is what defines the action that we're going to take with our end point. 
+In this example, we have a GET method , which will retrieve data and provide it to the client. 
+
+<example>
+--------
+app.get("/animals", (req, res)=>{
+  res.json(data)
+})
+
+
+Routing parameters are segments of the URL that are used to capture values specified at positions within a URL. 
+This means that you can pass data points through the URL to help define information that can be used to execute route methods
+in your application. It is a very cool and powerful feature
+
+
+************************************************************************************************
+Example of Rout chaining, Routing parameters, route methods
+************************************************************************************************
+
+//GET - download method
+app.get('/download', (request, response) => {
+    response.download('images/mountains_2.jpeg')
+})
+
+//GET - redirect method
+app.get('/redirect', (request, response) => {
+    response.redirect('http://www.linkedin.com')
+})
+
+//Route chaining
+app.route('/class')
+.get((request, response) => {
+    response.send('Retrieve class info')
+}).post((request, response) => {
+    response.send('Create class info')
+}).put((request, response) => {
+    response.send('Update class info')
+})
+
+
+//GET with next()
+app.get('/next', (request, response, next) => {
+   console.log("The response will be sent by the next function.")
+
+   next()
+}, (request, response) =>{
+    response.send('I just set up a route with a second callback.')
+})
+
+//GET with Routing Parameters
+app.get('/class/:id', (request, response)=> {
+    const studentId = Number(request.params.id);
+    
+    const student = data.filter((student) => student.id === studentId);
+    response.send(student)
+})
+
+
+*********************************************************************************************************************************
+
+
+
+
+************************************* ||||| MIDDLEWARE ||||||******************************************
+Middleware functions are functions that have access to the request object (req), the response object (res),
+and the next middleware function in the application’s request-response cycle. 
+The next middleware function is commonly denoted by a variable named next.
+
+Middleware functions can perform the following tasks:
+
+1. Execute any code.
+2. Make changes to the request and the response objects.
+3. End the request-response cycle.
+4. Call the next middleware function in the stack.
+
+If the current middleware function does not end the request-response cycle, 
+it must call next() to pass control to the next middleware function. Otherwise, the request will be left hanging.
+
+There are three middleware functions currently built-in express
+-------------------------
+
+1. express.static : Serves static assets
+2. express.json : Parses incoming requests with JSON payloads
+3. express.urlencoded : Parses incoming requests with URL-encoded payloads
+
+<Syntax of Middleware>
+----------------------
+Since thry are defined on application use, it is generally used with app.use so:-
+
+>app.use(callback)
+
+----> note it uses as callback function which then be executed for this given middleware, the callback gets req and res object
+
+>app.use(path, callback)
+
+----> In this case this middleware only get executed when that path is available
+
+>app.get | post | put | delete |....](path, callback);
+
+----------> In this case these are the routing middlewares that usess some  http verbs like post put delete and get and then after this verb it can take a path for which 
+it will executes the callback
+
+
+Example of middleware
+----------------------------
+
+app.use((req, res, next)=>{
+
+	//Do something
+
+	return next();
+});
+
+
+Express routing middleware
+-----------------------------
+
+app.get('./feed', (req, res, next)=>{
+	
+	//Do something
+	return res.send('something');
+
+});
+
+
+Above is an example of the routing middleware, this routing middleware uses any one http verb as here it uses get
+and then a path, this path here is './feed' so this is executed only when the path is available, after this the callback with req and res
+this will be doing something and to end this middleware the next is not used and instead response generally sends some data
+here it is res.send();
+
+other than this it can uses res.sendFile('something')  res.render('mytemplate')
+
+Parameter Routes
+------------------
+
+app.get('/speakers/:speakername', handler);
+
+url:- http://localhost:3000/users/frank
+
+Above example shows that the parts of the url can be dynamic, here in this case the :speakername is the dynamic variable and this is the parameter
+which actually in the url seen as frank. the value frank is stored in speakername variable
+
+now there is also a flexible way to define these parameter so that this variable can be invoked only if it is available (just by adding a question mark)
+
+app.get('/speakers/:speakername?', handler);
+
+
+
+Express LifeCycle
+--------------------
+
+1. Application initializes (Express import and creating a variable instance const app = express.Router())
+at initialization it will execute all the JS code that will register the middlewares
+
+2. It will start the http server and listen on the given port 
+const port = 3000
+app.listen(port, () => {
+  console.log('Express server activated!!');
+});
+---->Like on above example it is listening to the port 3000
+
+3. Then it waits untill the request for some URL comes in, suppose a get request for homepage ('/')
+
+4. After the Request the Express will execute all the middleware on order of their creation and call the
+next middleware if the request is not ending (app.use() => app.get('/') or app.get('/users'))   
+-Note as told before if next is not called then the request will hang
+-Note if the request have some path then the middleware executes if the path matches
+
+5. At the end of the request there will be some response that is send by the middleware code to the client.
+
+
+
+
+
+

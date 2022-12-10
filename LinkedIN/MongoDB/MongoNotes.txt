@@ -1,0 +1,537 @@
+------------------------
+why mongoDB?
+----------------------
+
+It allows to keep the complex data in form of document instead of the tabular form. Thinking about complex relational deta in form of
+Tables can be very difficult, where as writing the data in form of document its easy to work with.
+
+Whats the basic difference between MongoDB and traditional relational database is:
+-In the terms of how data is queries(reading/writing) to and from the database
+-How the data is structured.
+
+------------------------
+Relational DB
+-----------------------
+
+started in 1980's
+Data in from of rows and columns, and tables.
+it is based upon the relation between rows and columns
+
+and to make the query these databases used Structured Query Language(SQL)
+
+example to get all the info of the players with last name Parker :
+SELECT * FROM players
+WHERE last_name = "Parker"
+
+So consider an example of two tables where one table is of Players and other table is of Teams
+and we know that there can be multiple players in one team.
+so think it of as there are multiple rows of Players DB has to link to one row of the Teams DB
+
+In this case the relations come into play...so here these two tables can be joined together
+
+
+-------------------------------------------------
+How MONGODB is different from this?
+-------------------------------------------------
+
+The MONGODB is knows as the No SQL database
+
+and along with MONGODB there are other types like Cassandra, CouchDB, Redis, Memcache, DynamoDB
+and they uses many methods to query their data, this also includes other query languages like
+JavaScript and even HTTP
+
+so here in case of MongoDB JavaScript is used and the data is reperesented in the form of the
+document store.
+{
+	"key" : "value"
+}
+
+just like the objects
+
+Documents are very flexible and powerful way of storing data and it has many advantages, for example
+instead of having two seprate Tables of Players and Teams and then joining them together
+in document form, there can be a single document of Teams, and this document has all the 
+information of the Teams and this Team information could include an array of players in the team
+
+example:
+{
+	"name" : "Manchester United",
+	"stadium" : "old Trafford",
+	"players" : [
+		{
+			"name" : "Ronaldo",
+			"number" : 7,
+			"position" : "striker
+		},
+		{
+			"name" : "Paul Pogba",
+			"number" : 6,
+			"postiion" : "midfielder"
+		}
+		],
+	"schedule" : [...]
+}
+
+and to query the Data we can use the JSON like syntax
+example to find a team document with name Seattle Sounders
+
+db.teams.find({"name" : "Seattle Sounders"});
+
+
+----------------------------------------------
+Advantages of MongoDB
+-----------------------------------------------
+
+
+--> Schema-less, flexible storage format (JSON syntax).
+--> Very flexible queries.
+--> High speed and easily scalable via replication, sharding.
+
+
+//Install MongoDB community server. and download for windows.
+
+//Install MongoDB Compass which is GUI for MongoDB
+
+
+Default Locations after installing the MongoServer and GUI are then used to setup the server
+so by default the path mostly is:
+
+C:\Program Files\MongoDB\Server
+
+and inside servers there will be the different version folders
+
+Then comes the two files, bin folders and data folders
+
+inside the bin folders the binary files are located, and all the tools will be installed in this folder
+
+inside the data folder there will be the database that we create are located
+
+So inside the bin folder run mongo.exe file
+
+the CLI will open and after that to check the servers you have to run the following command:
+
+--> show dbs 
+
+the follwoing result will show up,
+
+
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+
+//////Notice there is file mongod.cfg ---------this is configuration file of MongoDB for windows./////
+
+
+
+**********************************************************
+				MONGO DB TOOLS	
+**********************************************************
+
+The link to download the MongoDB tools
+
+https://www.mongodb.com/try/download/database-tools
+
+The link to download the MongoDB Shell
+
+https://www.mongodb.com/try/download/shell
+
+make sure the package is MSI to install in windows, then download and run the installer
+when installing, it is important to check where the files are installing....
+the path of installation should be
+
+C:\Program Files\MongoDB\Server\5.0\
+
+Now to check, go to the bin folder and run the file------mongostat.exe
+
+If using Homebrew to install MongoDB on MacOS, to install database tools use the following cli
+-->brew install mongodb-database-tools
+
+************************************************************************************
+
+
+
+-----------------------------------------------------------------------
+			How to Import data in MongoDB?
+---------------------------------------------------------------------------
+
+
+1. Please make sure that MongoDB tools are istalled, specifically mongoimport.exe file inside the bin folder.
+
+2. Now suppose you have a folder named collections and inside you have a data in form of JSON, 
+
+for example:
+inside collection folder there is a file name recipes.json with following data
+
+[{
+	"_id": {
+		"$oid": "5e6fd805fa98021236426a24"
+	},
+	"title": "Chicken Soft Tacos",
+	"calories_per_serving": 205,
+	"cook_time": 19,
+	"desc": "Mexican soft tacos",
+	"directions": [
+		"Put seasoning on chicken breasts",
+		"Grill until done",
+		"Chop chicken into pieces",
+		"Put in tortillas"
+	],
+	"ingredients": [
+		{
+			"name": "chicken breast",
+			"quantity": {
+				"amount": 1,
+				"unit": "lbs"
+			}
+		},
+		{
+			"name": "taco seasoning",
+			"quantity": {
+				"amount": 2,
+				"unit": "oz"
+			}
+		},
+.....
+....
+....
+]
+
+Then there are several ways to import this inside the MongoDB server
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+									FIRST WAY OF IMPORTING DATA THROUGH CLI COMMANDS
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+Using the CLI (assuming the collections folder is inside the same folder where the MongoDB bin files data files and config files are)
+
+...........checking the files inside the current directory: 
+
+--->ls
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        29-08-2022     21:19                bin
+d-----        30-08-2022     08:54                collections
+d-----        30-08-2022     09:01                data
+d-----        29-08-2022     20:56                log
+-a----        15-08-2022     18:03          30608 LICENSE-Community.txt
+-a----        18-08-2022     20:10           3863 LICENSE.rtf
+-a----        15-08-2022     18:03          16726 MPL-2
+-a----        18-08-2022     20:10           3120 README
+-a----        18-08-2022     20:10         171754 THIRD-PARTY-NOTICES
+
+...............Navigating to the collections folder:
+
+-->cd collections
+
+...............command to import the recipes file into the DB
+
+-->../bin/mongoimport --db=cooker --jsonArray recipes.json
+
+2022-08-30T08:56:11.341+0530    no collection specified
+2022-08-30T08:56:11.343+0530    using filename 'recipes' as collection
+2022-08-30T08:56:11.987+0530    connected to: mongodb://localhost/
+2022-08-30T08:56:12.006+0530    7 document(s) imported successfully. 0 document(s) failed to import.
+
+important point to note here is... --db=cooker means that there is a database created named cooker, --jsonArray is because of the type of data inside recipes.json
+notice here we have not given any collection names, so by default it takes collection name as same as file name, in case here it is recipes.json,
+notice that it says 7 documents imported succesfully, tha means the everything is fine
+
+
+................connecting with the MongoDB now
+-->bin/mongo
+
+-->show dbs
+
+on doing this it will show the following file, and now notice that cooker is here added
+
+admin   0.000GB
+config  0.000GB
+cooker  0.000GB
+local   0.000GB
+>
+
+.................How to check the collections inside the coocker?
+
+-->use cooker
+switched to db cooker
+-->show collections
+recipes
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+									SECONED WAY OF IMPORTING DATA IS THROUGH GUI INTERFACE
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+1. Go to the MongoDB compass
+2. Connect it to the loalhost, by default the values are given.
+3. Then create a new Database, give the name of database and then the collection file
+4. opent he DB and then select JSON and browse the file recipe.json from the file selector
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+									Understanding Documents And Collections
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+What are Documents?
+
+--->>>> Documents are field-valued pairs that are stored in form of JSON like format called Binary JSON or BSON.
+example:
+ {
+	"title": "Chicken Soft Tacos",
+	"calories_per_serving": 205,
+	"cook_time": 19,
+	"desc": "Mexican soft tacos"
+}
+
+
+////////NOTE: In order to load the Mongo shell from command line, W+R cmd-------
+in the command line:
+--->mongo
+
+Now if this does not work then....Check that the mongo.exe or bin file from MongoDB is added to the environment variable
+to do this, copy the path of the mongo.exe file and then go to RIGHT CLICK THIS PC > properties> Advance system settings> environment variable > PATH > add new path (paste)
+
+open the cmd and run command
+--->mongo
+
+now can see the mongo shell is open again....
+
+Note:- that the mongoDB shell is like JavaScript shell and you can write the JavaScript here also
+
+
+
+--------------
+using dot notations to read a data inside the object of and object
+---------------------------------------------------------------------
+
+for example:
+{
+  "title": "Apple Pie",
+  "directions": [
+    "Roll the pie crust",
+    "Make the filling",
+    "Bake"
+  ],
+  "ingredients": [
+     {
+       "amount": {
+         "quantity": 2,
+           "unit": null
+         },
+        "name": "pie crusts"
+    }, {
+       "amount": {
+         "quantity": 1,
+           "unit": "tbsp"
+        },
+        "name": "cinnamon"
+    }
+  ]
+}
+
+
+for above case lets cath the ingredients name then to query this
+
+-->db.recipes.find({"ingredients.name":"egg"},{"title":1})
+
+notice we always use the dot notation to make this kind of query
+
+------------------------------------------------------------
+Example of adding a document in the database named cooker
+------------------------------------------------------------
+
+---> use cooker
+switched to db cooker
+
+
+---> doc = {"title" : "Tacos", "desc" : "Yay Tacos", "cook_time":20}
+{ "title" : "Tacos", "desc" : "Yay Tacos", "cook_time" : 20 }
+
+---> db.tacos.insertOne(doc)
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("630dd00277f1dd0789e42787")
+}
+
+
+---> db.tacos.find()
+{ "_id" : ObjectId("630dd00277f1dd0789e42787"), "title" : "Tacos", "desc" : "Yay Tacos", "cook_time" : 20 }
+
+
+---> db.tacos.find().pretty()
+{
+        "_id" : ObjectId("630dd00277f1dd0789e42787"),
+        "title" : "Tacos",
+        "desc" : "Yay Tacos",
+        "cook_time" : 20
+}
+
+
+
+-------------------------------------------------------------------
+Using find() to query documents
+--------------------------------------------------
+
+so basic syntax is
+>>>>db.collectionName.find({key-value pair for search}).pretty()
+
+.pretty() is used to visualize the data in readable form
+
+
+example:
+
+---->db.recipes.find({"title": "tacos").pretty()
+
+this gives all the document with the title tacos
+
+
+---suppose we want the details of the document with title tacos but we dont want the title then
+
+--->db.recipes.find({"title" : "tacos"}, {"title" : 0}).pretty()
+
+---suppose we want all the documents with just the title then
+
+--->db.recipes.find({}, {"title":1}).pretty()
+
+
+.................How to query a document with a partial title name
+
+for this purpose we will be using regex
+
+-->db.recipes.find({"title": {$regex: /taco/i}}, {"title": 1}}
+
+this will give all the data back that has taco in its title....but since here title : 1 then it will show only id and title in the return
+
+
+
+
+
+---------------------------------------------------------------------------
+What can be stored in the documents????
+---------------------------------------------------------------------------
+
+MongoDB allows to mix and match different types of data together. It allows adding an array inside an object which could be inside and array, so It is a 
+powerful tool in order to provide heavy customization to the database.
+
+Example: Let us say we need to insert one test document inside the database test
+
+--->db.test.insertOne({"title" : "test doc"})
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+*********************************** SOME COMMANDS WORTH KNOWING FOR NAVAGATING MONGODB THROUGH CLI *****************************************
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+1. TO SHOW ALL DATABASES:
+
+-->show dbs
+
+2. TO SHOW CURRENT DATABASE IN WHICH YOU ARE WORKING:
+
+-->db.getName()
+
+3. TO SHOW ALL THE COLLECTIONS INSIDE THE DATABASE:
+
+-->show collections
+
+4. TO INSERT NEW COLLECTION INSIDE THE CURRENT DATABASE BUT WITH EMPTY DOCUMENT:
+
+-->db.NameOfCollection.insertOne({})
+
+5. TO FIND THE DOCUMENTS INSIDE THE DATABASE:
+
+-->db.NameOfCollection.find()
+
+6. TO INSERT THE DOCUMENT INSIDE THE DATABASE COLLECTION:
+
+-->db.NameOfCOllection.inserOne({key-valued pair})
+
+7. TO LIMIT THE DOCUMENT QUERY LET SAY BY 3 :
+
+-->db.Name.find().limit(3)
+
+8. TO SORT THE QUERY LET US SAY BY ACCENDING ORDER AND BY TITLE (so alphabatical) : (note value 1 is accending and -1 is decending)
+
+-->db.Name.find().sort({"title" : 1})
+
+
+9. TO SKIP THE NUMBER OF DATA FROM TOP OF THE DOCUMENT THEN (lets say 2 titles from top of document here)
+
+--db.Name.find().sort({"title" : 1}).skip(2)
+
+
+
+
+----------------------------------------CONDITIONAL QUERIES-----------------------------------------------------------------------------------------------
+
+
+10. LESS THAN ($lt) AND GREATER THAN ($gt) QUERY: (here key can be any thing to compare for example it can be "cookTime" and here 10 is actually can be any number so 
+$lt : 10 means less than 10 and $gt : 10 means greater than 10 and $lte : 10 means less than and equal to 10)
+
+-->db.name.find({key : {$lt : 10 }})
+
+
+11. AN EXAMPLE OF AND QUERY FOR EXAMPLE A QUERY A RECIPE WITH COOK TIME OF 10 min AND PREP TIME of 15min
+
+-->db.recipes.find({"cook_time": {$lte : 10},"prep_time": {$lte : 15}}, {"title":1})
+
+12. Above EXAMPLE WITH THE OR QUERY
+
+-->db.recipes.find({$or:[{"cook_time": {$lte : 10},"prep_time": {$lte : 11}}]}, {"title":1})
+
+
+13. EXAMPLE OF MAKING QUERY WITH TAGS LETS SAY RECIPES THAT HAVE TAG EASY
+
+-->db.recipes.find({"tags" : "easy"}, {"title":1})
+
+
+14. EXAMPLE OF ABOVE CASE WITH "easy" AND "quick" tags --note here $all is used otherwise if we just make query with an arry the mogno will look for exact match
+
+-->db.recipes.find({"tags":{$all : ["easy","quick"]}}, {"title":1})
+
+15. EXAMPLE OF ABOVE CASE WITH "easy" OR "quick" TAGS: --note here same as above except all is replaced by in query
+
+-->db.recipes.find({"tags":{$in : ["easy","quick"]}}, {"title":1})
+
+
+
+-----------------------------------------------UPDATING DOCUMENTS-------------------------------------------------------------------
+
+16. EXAMPLE OF UPDATING THE TITLE OF A DOCUMENT FROM PIZZA TO THIN CRUST PIZZA
+
+-->db.recipes.updateOne({"title":"Pizza"}, { $set: {"title": "Thin Crust Pizza"}})
+
+(Important to note that here we have use title as a filer here, we can also use ID for very specific pizza
+also that here we are using set method, but this method can also insert new document if the file does not exist)
+
+
+17. EXAMPLE SAME AS ABOVE BUT WITH THE "unset" METHOD TO DELETE SOME FIELD. Suppose here we want to delete field Vegan from pizza
+
+-->db.recipes.updateOne({"title":"Pizza"}, { $unset: {"vegan": 1}})
+
+18. EXAMPLE INCREMENTING THE LIKES COUNT OF THE TACOS (using $inc)
+
+-->db.recipes.updateOne({"title":"Tacos"},{$inc : {"likes_count":1}})
+
+----------------------------------------------UPDATING ARRAYS INSIDE DOCUMENTS------------------------------------------------------------
+(we use push and pull methods to add and delete)
+
+19. TO ADD USE PUSH AND TO DELETE ADD PULL
+
+--> db.examples.updateOne({"title":"Tacos"},{$push:{"likes":60}})
+
+-->db.examples.updateOne({"title":"Tacos"},{$pull:{"likes":60}})
+
+
+20. DELETING THE DOCUMENT. 
+
+it is done by using the id of the document that needs to be deleted
+
+--> db.examples.deleteOne({"_id" : ObjectId("5ee69e393260aab97ea0d58e")})
+
+
+

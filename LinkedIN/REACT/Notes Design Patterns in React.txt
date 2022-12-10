@@ -1,0 +1,25 @@
+React Design patterns:
+----------------------
+
+Controlled and UnControlled form:
+----------------------------------
+Controlled forms are those which have usestate hooks, and uncotrolled forms are made with the useRef hook
+
+----Why we use controlled forms?
+----We use controlled form because in case of uncontrolled for any changes in data input by the user is not captured untill the submission is done
+this leads to bad experience as we want to provide users feedback as soon as they type something that violates our form regulation. 
+So in case of controll form we use UseState and e.target.value which gives us all the changes that users do on form field. We can listen to these changes
+and we can re render an error for the same using UseEffect hook.
+for example if the form requires name min 2 charachters but user typed only one charachter, The form will alert user about the error saying the form
+needs atleast 2 charachters for the username.
+
+Higher Order Components
+-------------------------
+They are the components that returns other components and those components return JSX. SO basically we do this to share the behaviour among
+different components that they share.
+So we can add new functionaliy by creating HOC on other components,
+Think of HOC as a functional components that is a factory house of other components.
+Note they do not follow normally same convention as the other components, so they never start with the capital letters
+and they are not displayed inside the App.js like other components do, so they start with the smallcase letters.
+
+

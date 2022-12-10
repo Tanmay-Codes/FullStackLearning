@@ -19,7 +19,7 @@ export default function Login() {
         <div className="loginLeft">
           <h3 className="loginLogo">FAYMN</h3>
           <span className="loginDesc">
-            Feel the Beat and the world of Music with FAYMN.
+            For All Your Music Needs.
           </span>
         </div>
         <div className="loginRight">
