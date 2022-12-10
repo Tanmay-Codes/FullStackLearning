@@ -50,7 +50,7 @@ function App() {
       body: JSON.stringify(newitem),
     };
     const result = await apiRequest(API_URL, postOptions);
-    if(result) setFetchErr(result);
+    if (result) setFetchErr(result);
   };
 
   const handleSubmit = (e) => {
@@ -69,26 +69,25 @@ function App() {
 
     const myitem = listItems.filter((item) => item.id === id);
     const updateOptions = {
-      method : "PATCH",
-      headers : {
-        'content-type' : 'application/json'
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
       },
-      body : JSON.stringify({checked: myitem[0].checked})
+      body: JSON.stringify({ checked: myitem[0].checked }),
     };
     const reqUrl = `${API_URL}/${id}`;
     const result = await apiRequest(reqUrl, updateOptions);
-    if(result) setFetchErr(result);
+    if (result) setFetchErr(result);
   };
 
   // Declaring the Delete Item function here
   const handleDelete = async (id) => {
-    const listItems = items.filter((item) => item.id != id);
+    const listItems = items.filter((item) => item.id !== id);
     setItems(listItems);
-
-    const deleteOptions = {method : 'DELETE'};
+    const deleteOptions = { method: "DELETE" };
     const reqUrl = `${API_URL}/${id}`;
     const result = await apiRequest(reqUrl, deleteOptions);
-    if(result) setFetchErr(result);
+    if (result) setFetchErr(result);
   };
   return (
     <div className="App">
@@ -102,14 +101,16 @@ function App() {
       <div>
         {isLoading && <p>Loading Items...</p>}
         {fetchErr && <p>{`Error : ${fetchErr}`}</p>}
-        {!fetchErr && !isLoading && <Content
-          // here item.filter is used to filter out the state of search item shows in the search
-          items={items.filter((item) =>
-            item.item.toLowerCase().includes(search.toLocaleLowerCase())
-          )}
-          handleChecked={handleChecked}
-          handleDelete={handleDelete}
-        />}
+        {!fetchErr && !isLoading && (
+          <Content
+            // here item.filter is used to filter out the state of search item shows in the search
+            items={items.filter((item) =>
+              item.item.toLowerCase().includes(search.toLocaleLowerCase())
+            )}
+            handleChecked={handleChecked}
+            handleDelete={handleDelete}
+          />
+        )}
       </div>
       <Footer n={items.length} />
     </div>
